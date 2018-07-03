@@ -21,7 +21,7 @@ module.exports = {
       .then((task) => {
         if (!task) {
           return res.status(404).send({
-            message: 'Note not found with id ' + req.params.id
+            message: `Note not found with id ${req.params.id}`
           });
         }
         res.send(task);
@@ -29,11 +29,11 @@ module.exports = {
       .catch((err) => {
         if (err.kind === 'ObjectId') {
           return res.status(404).send({
-            message: 'Note not found with id ' + req.params.id
+            message: `Note not found with id ${req.params.id}`
           });
         }
         return res.status(500).send({
-          message: 'Error retrieving task with id ' + req.params.id
+          message: `Error retrieving task with id ${req.params.id}`
         });
       });
   },
@@ -51,8 +51,8 @@ module.exports = {
     const task = new Task(
       {
         title: req.body.title,
-        description: req.body.description,
-        status: req.body.status
+        description: req.body.description || '',
+        status: req.body.status || 'To do'
       }
     );
 
@@ -71,16 +71,14 @@ module.exports = {
   // Update a task identified by the id in the request
   update: (req, res) => {
     // Validate Request
-    if (!req.body.title) {
+    if (!req.body) {
       return res.status(400).send({
         message: 'Note content can not be empty'
       });
     }
 
     // Find task and update it with the request body
-    Task.findByIdAndUpdate(req.params.id, {
-      title: req.body.title,
-    }, { new: true })
+    Task.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
       .then((task) => {
         if (!task) {
           return res.status(404).send({
