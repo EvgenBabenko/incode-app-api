@@ -1,32 +1,21 @@
-const express = require("express");
+const express = require('express');
 const taskController = require('../controllers/taskController');
 
 const taskRouter = express.Router();
 
-
-
-// // Retrieve all Notes
+// // Retrieve all Tasks
 taskRouter.get('/', taskController.findAll);
 
-// // Create a new Note
+// // Create a new Task
 taskRouter.post('/', taskController.create);
 
-// // Retrieve a single Note with noteId
-taskRouter.get('/:task', taskController.findOne);
+// // Retrieve a single Task with noteId
+taskRouter.get('/:id', taskController.findOne);
 
-// // Update a Note with noteId
-// taskRouter.put('/notes/:noteId', taskController.update);
+// // Update a Task with noteId
+taskRouter.put('/:id', taskController.update);
 
-// // Delete a Note with noteId
-// taskRouter.delete('/notes/:noteId', taskController.delete);
-
-
-// router.get('/test', task_controller.test);
-// router.get('/', task_controller.tasks_all);
-// router.post('/create', task_controller.task_create);
-// router.get('/:id', task_controller.task_details);
-// router.put('/:id/update', task_controller.task_update);
-// router.delete('/:id/delete', task_controller.task_delete);
-
+// // Delete a Task with noteId
+taskRouter.delete('/:id', taskController.delete);
 
 module.exports = taskRouter;
