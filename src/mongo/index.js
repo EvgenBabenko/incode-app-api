@@ -15,11 +15,3 @@ class MongoManager {
 }
 
 module.exports = { MongoManager };
-
-// mongoose.connect('mongodb://localhost:3001/mongoose-test')
-// mongoose.connect(mongoUrl)
-//   .then(() => { console.log('Successfully connected to the database'); })
-//   .catch((err) => {
-//     console.log('Could not connect to the database. Exiting now...');
-//     process.exit();
-//   });
