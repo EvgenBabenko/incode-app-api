@@ -3,11 +3,12 @@ const bodyParser = require('body-parser');
 const config = require('./config');
 const { MongoManager } = require('./mongo');
 
+const taskRouter = require('./routes/taskRoute');
+const AuthController = require('./controllers/Auth');
+
 const mongo = new MongoManager(config);
 
 const app = express();
-
-const taskRouter = require('./routes/taskRoute');
 
 mongo.connect()
   .then(() => { console.log('Successfully connected to the database'); })
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', taskRouter);
+app.use('/auth', AuthController);
+app.use('/dashboard', taskRouter);
 
 app.listen(config.PORT, () => console.log(`Example app listening on port ${config.PORT}!`));
