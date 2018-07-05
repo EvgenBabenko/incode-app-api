@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 
 const config = require('./config');
 const mongo = require('./mongo');
-const taskRouter = require('./routes/taskRoute');
-const authRoute = require('./routes/authRoute');
 const accessControlAllow = require('./utils/cors');
+const authRoute = require('./routes/authRoute');
+const taskRouter = require('./routes/taskRoute');
+const userRoute = require('./routes/userRoute');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // CORS middleware
 app.use(accessControlAllow);
 app.use('/auth', authRoute);
+app.use('/user', userRoute);
 app.use('/', taskRouter);
 
 app.listen(config.PORT, () => console.log(`Example app listening on port ${config.PORT}!`));

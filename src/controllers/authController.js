@@ -21,7 +21,7 @@ module.exports = {
       });
 
       // return the information including token as JSON
-      res.status(200).send({ auth: true, token });
+      res.status(200).send({ auth: true, token, id: user._id });
     });
   },
 
@@ -51,7 +51,7 @@ module.exports = {
           expiresIn: 86400 // expires in 24 hours
         });
 
-        res.status(200).send({ auth: true, token });
+        res.status(200).send({ auth: true, token, id: user._id });
       });
     });
   },

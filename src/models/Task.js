@@ -7,7 +7,7 @@ const TaskSchema = new Schema({
   description: String,
   status: String,
   createdAt: { type: Date, default: new Date() },
-  // createdForID: { type: Schema.Types.ObjectId, ref: 'User' },
+  createdByID: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Task', TaskSchema);
