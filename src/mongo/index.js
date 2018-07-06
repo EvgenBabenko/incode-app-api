@@ -1,17 +1,12 @@
 const mongoose = require('mongoose');
 
-class MongoManager {
-  constructor(config) {
-    this.config = config;
-  }
+const { MONGODB_URI } = require('../config');
 
-  getMongoUrl() {
-    return this.config.MONGODB_URI;
-  }
-
-  connect() {
-    return mongoose.connect(this.getMongoUrl());
-  }
-}
-
-module.exports = { MongoManager };
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+  .then(() => { console.log('Successfully connected to the database'); })
+  .catch((err) => {
+    console.log(`Could not connect to the database. Exiting now...
+    ${err}`);
+    process.exit();
+  });
+mongoose.Promise = global.Promise;

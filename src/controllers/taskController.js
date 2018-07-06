@@ -1,124 +1,80 @@
 const Task = require('../models/Task');
 
 module.exports = {
-  // Retrieve and return all notes from the database.
-  findAll: (req, res) => {
+  // Return all Tasks from the database.
+  getAll: (req, res) => {
     Task.find()
-      .then((task) => {
-        console.log('task', task);
-        res.send(task);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message || 'Some error occurred while retrieving notes.'
-        });
-      });
+      .then(task => res.send(task))
+      .catch(err => res.status(500).send({ message: 'Some error occurred while retrieving tasks.' }));
+  },
+
+  getAllByUser: (req, res) => {
+    Task.aggregate(
+      [{ $match: { createdByID: req.params.id } }]
+    )
+      // Task.find()
+      .then(task => res.send(task))
+      .catch(err => res.status(500).send({ message: 'Some error occurred while retrieving tasks.' }));
   },
 
   // Find a single task with a id
-  findOne: (req, res) => {
+  getOne: (req, res) => {
     Task.findById(req.params.id)
       .then((task) => {
-        if (!task) {
-          return res.status(404).send({
-            message: `Note not found with id ${req.params.id}`
-          });
-        }
+        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
         res.send(task);
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId') {
-          return res.status(404).send({
-            message: `Note not found with id ${req.params.id}`
-          });
-        }
-        return res.status(500).send({
-          message: `Error retrieving task with id ${req.params.id}`
-        });
+        if (err.kind === 'ObjectId') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
+        return res.status(500).send({ message: `Error retrieving task with id ${req.params.id}` });
       });
   },
 
-  // Create and Save a new task
+  // Create a new task
   create: (req, res) => {
-    // Validate request
-    if (!req.body.title) {
-      return res.status(400).send({
-        message: 'Task title can not be empty'
-      });
-    }
+    if (!req.body.title) return res.status(400).send({ message: 'Task title can not be empty' });
 
-    // Create a Task
-    const task = new Task(
-      {
-        title: req.body.title,
-        description: req.body.description || '',
-        status: req.body.status || 'To do'
-      }
-    );
+    const task = new Task({
+      title: req.body.title,
+      description: req.body.description,
+    });
 
-    // Save Task in the database
     task.save()
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message || 'Some error occurred while creating the Note.'
-        });
-      });
+      .then(data => res.send(data))
+      .catch(err => res.status(500).send({ message: err.message || 'Some error occurred while creating the Task.' }));
   },
 
-  // Update a task identified by the id in the request
+  // Update a task
   update: (req, res) => {
-    // Validate Request
-    if (!req.body) {
-      return res.status(400).send({
-        message: 'Note content can not be empty'
-      });
-    }
+    if (!req.body) return res.status(400).send({ message: 'Task content can not be empty' });
 
-    // Find task and update it with the request body
     Task.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
       .then((task) => {
-        if (!task) {
-          return res.status(404).send({
-            message: `Task not found with id ${req.params.id}`
-          });
-        }
+        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
         res.send(task);
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId') {
-          return res.status(404).send({
-            message: `Task not found with id ${req.params.id}`
-          });
-        }
-        return res.status(500).send({
-          message: `Error updating task with id ${req.params.id}`
-        });
+        if (err.kind === 'ObjectId') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
+        return res.status(500).send({ message: `Error updating task with id ${req.params.id}` });
       });
   },
 
-  // Delete a task with the specified id in the request
+  // Delete a task
   delete: (req, res) => {
     Task.findByIdAndRemove(req.params.id)
       .then((task) => {
-        if (!task) {
-          return res.status(404).send({
-            message: `Task not found with id ${req.params.id}`
-          });
-        }
-        res.send({ message: 'Note deleted successfully!' });
+        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
+        res.send({ message: 'Task deleted successfully!' });
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-          return res.status(404).send({
-            message: `Task not found with id ${req.params.id}`
-          });
-        }
-        return res.status(500).send({
-          message: `Could not delete task with id ${req.params.id}`
-        });
+        if (err.kind === 'ObjectId' || err.name === 'NotFound') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+
+        return res.status(500).send({ message: `Could not delete task with id ${req.params.id}` });
       });
   },
 };
