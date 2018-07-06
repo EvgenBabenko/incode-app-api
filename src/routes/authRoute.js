@@ -6,7 +6,7 @@ const verifyToken = require('../utils/verifyToken');
 const router = express.Router();
 
 router.post('/login', authController.login);
-router.get('/logout', authController.logout);
+// router.get('/logout', authController.logout);
 router.post('/register', authController.register);
 router.get('/me', verifyToken, authController.me);
 

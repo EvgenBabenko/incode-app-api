@@ -25,22 +25,33 @@ module.exports = {
   },
 
   // Create a new user
-  create: (req, res) => {
-    if (!req.email && !req.password) return res.status(400).send({ message: 'User can not be empty' });
+  // create: (req, res) => {
+  //   if (!req.email && !req.password) return res.status(400).send({ message: 'User can not be empty' });
 
-    const user = new User({
-      email: req.body.email,
-      password: req.body.password
-    });
+  //   const user = new User({
+  //     email: req.body.email,
+  //     password: req.body.password,
+  //     profile: {
+  //       avatar: '',
+  //       firstName: '',
+  //       lastName: '',
+  //       dateOfBirth: '',
+  //       gender: '',
+  //       address: '',
+  //       phoneNumber: '',
+  //       skills: '',
+  //       experience: '',
+  //     }
+  //   });
 
-    user.save()
-      .then(data => res.send(data))
-      .catch(err => res.status(500).send({ message: err.message || 'Some error occurred while creating the User.' }));
-  },
+  //   user.save()
+  //     .then(data => res.send(data))
+  //     .catch(err => res.status(500).send({ message: err.message || 'Some error occurred while creating the User.' }));
+  // },
 
   // Update a user
   update: (req, res) => {
-    User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    User.findByIdAndUpdate(req.params.id, { $set: { profile: req.body } }, { new: true })
       .then((user) => {
         if (!user) return res.status(404).send({ message: `User not found with id ${req.params.id}` });
 

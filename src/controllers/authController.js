@@ -39,9 +39,19 @@ module.exports = {
       const hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
       User.create({
-        name: req.body.name,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
+        profile: {
+          avatar: '',
+          firstName: '',
+          lastName: '',
+          dateOfBirth: '',
+          gender: '',
+          address: '',
+          phoneNumber: '',
+          skills: '',
+          experience: '',
+        }
       }, (err, user) => {
         if (err) return res.status(500).send('There was a problem registering the user`.');
 
