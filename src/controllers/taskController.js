@@ -38,9 +38,7 @@ module.exports = {
 
     const task = new Task({
       title: req.body.title,
-      createdByID: req.body.createdByID,
-      description: req.body.description || '',
-      status: 'To do'
+      description: req.body.description,
     });
 
     task.save()
