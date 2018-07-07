@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const config = require('config');
 
-const config = require('./config');
 const mongo = require('./mongo');
-// const accessControlAllow = require('./utils/cors');
+const accessControlAllow = require('./middlewares/cors');
 
 const authRoute = require('./routes/authRoute');
 const taskRouter = require('./routes/taskRoute');
@@ -15,19 +15,9 @@ const userRoute = require('./routes/userRoute');
 
 const app = express();
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.json());
-// parse requests of content-type - application/json
-app.use(bodyParser.urlencoded({ extended: false }));
-// CORS middleware
-// app.use(accessControlAllow);
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-access-token');
-  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-  next();
-});
+app.use(accessControlAllow); // CORS middleware
+app.use(bodyParser.json()); // parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false })); // parse requests of content-type - application/json
 
 // app.all('/api/v1/*', validateRequest);
 
@@ -53,4 +43,6 @@ app.use('/', taskRouter);
 //   next(err);
 // });
 
-app.listen(config.PORT, () => console.log(`Example app listening on port ${config.PORT}!`));
+app.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`));
+
+module.exports = app; // for testing

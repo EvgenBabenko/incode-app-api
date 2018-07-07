@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const config = require('config');
 
-const { MONGODB_URI } = require('../config');
+// const { MONGODB_URI } = require('../config');
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+mongoose.connect(config.DBHost, { useNewUrlParser: true })
   .then(() => { console.log('Successfully connected to the database'); })
   .catch((err) => {
     console.log(`Could not connect to the database. Exiting now...

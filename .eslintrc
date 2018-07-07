@@ -30,6 +30,7 @@
     "react/display-name": 1,
     "no-unused-vars": "warn",
     "no-console": 1,
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "no-unexpected-multiline": "warn"
   },
   "settings": {

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const bcrypt = require('bcryptjs');
+const config = require('config');
 
-const { SECRET_KEY, ADMIN_PASS } = require('../config'); // get config file
 const User = require('../models/User');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 
       // if user is found and password is valid
       // create a token
-      const token = jwt.sign({ id: user._id }, SECRET_KEY, {
+      const token = jwt.sign({ id: user._id }, config.secretKey, {
         expiresIn: 86400 // expires in 24 hours
       });
 
@@ -54,7 +54,7 @@ module.exports = {
 
         // if user is registered without errors
         // create a token
-        const token = jwt.sign({ id: user._id }, SECRET_KEY, {
+        const token = jwt.sign({ id: user._id }, config.secretKey, {
           expiresIn: 86400 // expires in 24 hours
         });
 
@@ -82,7 +82,7 @@ module.exports = {
 
         // if user is registered without errors
         // create a token
-        const token = jwt.sign({ id: user._id }, SECRET_KEY, {
+        const token = jwt.sign({ id: user._id }, config.secretKey, {
           expiresIn: 86400 // expires in 24 hours
         });
 
