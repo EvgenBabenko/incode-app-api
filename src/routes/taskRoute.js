@@ -1,14 +1,25 @@
 const express = require('express');
 
-const taskController = require('../controllers/taskController');
+const {
+  getAll, createTask, getOne, updateTask, deleteTask,
+} = require('../controllers/taskController');
+const checkPermission = require('../middlewares/checkPermission');
+const verifyToken = require('../middlewares/verifyToken');
 
 const router = express.Router();
 
-router.get('/', taskController.getAll);
-router.get('/byUser/:id', taskController.getAllByUser);
-router.post('/', taskController.create);
-router.get('/:id', taskController.getOne);
-router.put('/:id', taskController.update);
-router.delete('/:id', taskController.delete);
+router.get('/', getAll);
+router.post('/', createTask);
+router.get('/:id', getOne);
+router.put('/:id', updateTask);
+router.delete('/:id', deleteTask);
+
+// should be like that, but don't work in app and test too not pass :(
+
+// router.get('/', verifyToken, getAll);
+// router.post('/', verifyToken, checkPermission, createTask);
+// router.get('/:id', verifyToken, getOne);
+// router.put('/:id', verifyToken, checkPermission, updateTask);
+// router.delete('/:id', verifyToken, deleteTask);
 
 module.exports = router;

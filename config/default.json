@@ -2,5 +2,6 @@
   "DBHost": "mongodb://incode:incode2015@ds125211.mlab.com:25211/incode",
   "port": "8080",
   "secretKey": "supersecret",
+  "JWTExpiresIn": "172800", //48 hours
   "adminPass": "incode"
 }

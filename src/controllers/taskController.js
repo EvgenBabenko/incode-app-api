@@ -1,39 +1,39 @@
 const Task = require('../models/Task');
 
 module.exports = {
-  // Return all Tasks from the database.
   getAll: (req, res) => {
     Task.find()
       .then(task => res.send(task))
-      .catch(err => res.status(500).send({ message: 'Some error occurred while retrieving tasks.' }));
+      .catch(err => res.status(500).send({ message: `Server error: ${err}` }));
   },
 
-  getAllByUser: (req, res) => {
-    Task.aggregate(
-      [{ $match: { createdByID: req.params.id } }]
-    )
-      // Task.find()
-      .then(task => res.send(task))
-      .catch(err => res.status(500).send({ message: 'Some error occurred while retrieving tasks.' }));
-  },
 
-  // Find a single task with a id
+  // getAllByUser: (req, res) => {
+  //   Task.aggregate(
+  //     [{ $match: { createdByID: req.params.id } }],
+  //   )
+  //     // Task.find()
+  //     .then(task => res.send(task))
+  //     .catch(err => res.status(500).send({ message: 'Some error occurred while retrieving tasks.' }));
+  // },
+
+
   getOne: (req, res) => {
     Task.findById(req.params.id)
       .then((task) => {
         if (!task) return res.status(404).send({ message: 'Task not found!' });
 
-        res.send(task);
+        return res.send(task);
       })
       .catch((err) => {
         if (err.kind === 'ObjectId') return res.status(404).send({ message: 'Task not found!' });
 
-        return res.status(500).send({ message: `Error retrieving task with id ${req.params.id}` });
+        return res.status(500).send({ message: 'Internal server error.' });
       });
   },
 
-  // Create a new task
-  create: (req, res) => {
+
+  createTask: (req, res) => {
     if (!req.body.title) return res.status(400).send({ message: 'Task title can not be empty' });
 
     const task = new Task({
@@ -41,35 +41,35 @@ module.exports = {
       description: req.body.description,
     });
 
-    task.save()
+    return task.save()
       .then(data => res.send(data))
-      .catch(err => res.status(500).send({ message: err.message || 'Some error occurred while creating the Task.' }));
+      .catch(err => res.status(500).send({ message: `Server error: ${err}` }));
   },
 
-  // Update a task
-  update: (req, res) => {
+
+  updateTask: (req, res) => {
     if (!Object.keys(req.body).length) return res.status(400).send({ message: 'Task content can not be empty' });
 
-    Task.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    return Task.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
       .then((task) => {
         if (!task) return res.status(404).send({ message: 'Task not found!' });
 
-        res.send(task);
+        return res.send(task);
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (err.kind === 'ObjectId') return res.status(404).send({ message: 'Task not found!' });
 
         return res.status(500).send({ message: 'Error updating task!' });
       });
   },
 
-  // Delete a task
-  delete: (req, res) => {
+
+  deleteTask: (req, res) => {
     Task.findByIdAndRemove(req.params.id)
       .then((task) => {
         if (!task) return res.status(404).send({ message: 'Task not found!' });
 
-        res.send({ message: 'Task deleted successfully!' });
+        return res.send({ message: 'Task deleted successfully!' });
       })
       .catch((err) => {
         if (err.kind === 'ObjectId' || err.name === 'NotFound') return res.status(404).send({ message: 'Task not found!' });
