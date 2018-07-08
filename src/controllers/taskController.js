@@ -21,12 +21,12 @@ module.exports = {
   getOne: (req, res) => {
     Task.findById(req.params.id)
       .then((task) => {
-        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (!task) return res.status(404).send({ message: 'Task not found!' });
 
         res.send(task);
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (err.kind === 'ObjectId') return res.status(404).send({ message: 'Task not found!' });
 
         return res.status(500).send({ message: `Error retrieving task with id ${req.params.id}` });
       });
@@ -48,18 +48,18 @@ module.exports = {
 
   // Update a task
   update: (req, res) => {
-    if (!req.body) return res.status(400).send({ message: 'Task content can not be empty' });
+    if (!Object.keys(req.body).length) return res.status(400).send({ message: 'Task content can not be empty' });
 
     Task.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
       .then((task) => {
-        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (!task) return res.status(404).send({ message: 'Task not found!' });
 
         res.send(task);
       })
       .catch((err) => {
         if (err.kind === 'ObjectId') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
 
-        return res.status(500).send({ message: `Error updating task with id ${req.params.id}` });
+        return res.status(500).send({ message: 'Error updating task!' });
       });
   },
 
@@ -67,14 +67,14 @@ module.exports = {
   delete: (req, res) => {
     Task.findByIdAndRemove(req.params.id)
       .then((task) => {
-        if (!task) return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (!task) return res.status(404).send({ message: 'Task not found!' });
 
         res.send({ message: 'Task deleted successfully!' });
       })
       .catch((err) => {
-        if (err.kind === 'ObjectId' || err.name === 'NotFound') return res.status(404).send({ message: `Task not found with id ${req.params.id}` });
+        if (err.kind === 'ObjectId' || err.name === 'NotFound') return res.status(404).send({ message: 'Task not found!' });
 
-        return res.status(500).send({ message: `Could not delete task with id ${req.params.id}` });
+        return res.status(500).send({ message: 'Could not delete task!' });
       });
   },
 };
