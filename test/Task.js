@@ -6,6 +6,7 @@ const chaiHttp = require('chai-http');
 
 const Task = require('../src/models/Task');
 const server = require('../src/app');
+
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -38,7 +39,7 @@ describe('Task', () => {
   describe('/POST task', () => {
     it('it should not POST a task without title', (done) => {
       const task = {
-        description: 'two cases for each test'
+        description: 'two cases for each test',
       };
       chai.request(server)
         .post('/')
@@ -53,7 +54,7 @@ describe('Task', () => {
     it('it should POST a task ', (done) => {
       const task = {
         title: 'Write test Mocha',
-        description: 'two cases for each test'
+        description: 'two cases for each test',
       };
       chai.request(server)
         .post('/')
@@ -75,7 +76,7 @@ describe('Task', () => {
       const task = new Task({
         title: 'Write test Mocha',
         description: 'two cases for each test',
-        status: 'To do'
+        status: 'To do',
       });
       task.save((err, data) => {
         chai.request(server)
@@ -96,7 +97,7 @@ describe('Task', () => {
       const task = new Task({
         title: 'Write test Mocha',
         description: 'two cases for each test',
-        status: 'To do'
+        status: 'To do',
       });
       const id = 7;
       task.save((err, data) => {
@@ -112,19 +113,19 @@ describe('Task', () => {
       });
     });
   });
-  // /*
-  //  * Test the /PUT/:id route
-  //  */
+  /*
+   * Test the /PUT/:id route
+   */
   describe('/PUT/:id task', () => {
     it('it should UPDATE a task given the id', (done) => {
       const task = new Task({
-        title: 'Write test Mocha'
+        title: 'Write test Mocha',
       });
       task.save((err, data) => {
         chai.request(server)
           .put(`/${data.id}`)
           .send({
-            title: 'Write test Mocha, and use Chai'
+            title: 'Write test Mocha, and use Chai',
           })
           .end((err, res) => {
             res.should.have.status(200);
@@ -136,7 +137,7 @@ describe('Task', () => {
     });
     it('it should not UPDATE a task given the id with empty data to update', (done) => {
       const task = new Task({
-        title: 'Write test Mocha'
+        title: 'Write test Mocha',
       });
       task.save((err, data) => {
         chai.request(server)
@@ -159,7 +160,7 @@ describe('Task', () => {
       const task = new Task({
         title: 'Write test Mocha',
         description: 'two cases for each test',
-        status: 'To do'
+        status: 'To do',
       });
       task.save((err, data) => {
         chai.request(server)

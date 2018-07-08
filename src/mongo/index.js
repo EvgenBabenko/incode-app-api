@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('config');
 
-// const { MONGODB_URI } = require('../config');
-
 mongoose.connect(config.DBHost, { useNewUrlParser: true })
   .then(() => { console.log('Successfully connected to the database'); })
   .catch((err) => {
@@ -10,4 +8,5 @@ mongoose.connect(config.DBHost, { useNewUrlParser: true })
     ${err}`);
     process.exit();
   });
+  
 mongoose.Promise = global.Promise;
