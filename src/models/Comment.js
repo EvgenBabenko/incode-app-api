@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 
 const CommentSchema = new Schema({
   content: { type: String, required: true },
-  createdAt: { type: Date, default: new Date() },
-  updatedAt: { type: Date, default: new Date() },
+  createdAt: { type: Date, required: true, default: new Date() },
+  updatedAt: { type: Date, required: true, default: new Date() },
   // createdByID: { type: String, required: true },
   // taskID: { type: String, required: true },
 });

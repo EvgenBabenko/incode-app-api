@@ -1,24 +1,23 @@
 const mongoose = require('mongoose');
 
+const Profile = require('./Profile');
+
 const { Schema } = mongoose;
 
-const ProfileSchema = {
-  avatar: { type: String, default: '' },
-  firstName: { type: String, trim: true, default: '' },
-  lastName: { type: String, trim: true, default: '' },
-  dateOfBirth: { type: String, default: '' },
-  gender: { type: String, default: '' },
-  address: { type: String, trim: true, default: '' },
-  phoneNumber: { type: String, trim: true, default: '' },
-  skills: { type: String, trim: true, default: '' },
-  experience: { type: String, trim: true, default: '' },
-};
-
 const UserSchema = new Schema({
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  profile: ProfileSchema,
-  role: { type: String, default: 'user' },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    validate: {
+      validator: v => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(v),
+      message: '{VALUE} is not a valid email!',
+    },
+  },
+  password: { type: String, trim: true, required: true },
+  profile: Profile,
+  role: { type: String, required: true, default: 'user' },
 });
 
 module.exports = mongoose.model('User', UserSchema);
